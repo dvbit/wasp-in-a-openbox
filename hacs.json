@@ -3,5 +3,5 @@
     "filename": "wasp_in_a_openbox.zip",
     "hide_default_branch": true,
     "homeassistant": "2026.1.0",
-    "zip_release": true
+    "zip_release": false
 }
