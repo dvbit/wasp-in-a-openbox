@@ -1,0 +1,13 @@
+{
+    "services": {
+        "reset": {
+            "service": "mdi:refresh"
+        },
+        "force_entry": {
+            "service": "mdi:location-enter"
+        },
+        "force_exit": {
+            "service": "mdi:location-exit"
+        }
+    }
+}

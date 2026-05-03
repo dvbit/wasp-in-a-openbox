@@ -1,0 +1,24 @@
+# Services for Wasp in a Openbox integration
+reset:
+  name: Reset
+  description: Reset the occupancy sensor to off and clear any pending timers and border event history.
+  target:
+    entity:
+      integration: wasp_in_a_openbox
+      domain: binary_sensor
+
+force_entry:
+  name: Force entry
+  description: Manually signal an entry event, setting the room to occupied.
+  target:
+    entity:
+      integration: wasp_in_a_openbox
+      domain: binary_sensor
+
+force_exit:
+  name: Force exit
+  description: Manually signal an exit event, setting the room to unoccupied and clearing all timers.
+  target:
+    entity:
+      integration: wasp_in_a_openbox
+      domain: binary_sensor

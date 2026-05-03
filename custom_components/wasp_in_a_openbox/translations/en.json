@@ -1,0 +1,127 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Create Wasp in a Openbox",
+                "description": "Create an occupancy sensor that handles periods of no motion.\nSupports enclosed rooms (doors) and open passages (border/curtain sensors).",
+                "data": {
+                    "name": "Name",
+                    "wasp_id": "Motion sensor",
+                    "box_id": "Door sensor",
+                    "door_closed_delay": "Door closed delay",
+                    "door_open_timeout": "Door open timeout",
+                    "immediate_on": "Immediate on",
+                    "border_ids": "Border sensors",
+                    "border_correlation_window": "Border correlation window",
+                    "border_exit_timeout": "Border exit timeout",
+                    "border_only_mode": "Border only mode"
+                },
+                "data_description": {
+                    "wasp_id": "Select the motion sensor for the room.",
+                    "box_id": "Select the door sensor for the room. Leave empty if the room has no door (use border sensors instead).",
+                    "door_closed_delay": "Set the delay (in seconds) after the door is closed before determining if the room is occupied. If motion is detected when the delay expires, the helper is set to occupied.\nShould be set to about 10 seconds above how long your motion sensor stays active after motion has stopped.",
+                    "door_open_timeout": "The timeout (in seconds) after which if there is no motion detected and the door is open, the helper will be set to unoccupied.",
+                    "immediate_on": "When enabled, occupancy turns on immediately when motion is detected or the door is opened.\nWhen disabled, the door closed delay applies before turning on.",
+                    "border_ids": "Select curtain PIR or passage sensors that detect movement between this room and adjacent spaces. These are motion sensors mounted in doorways or archways without physical doors.",
+                    "border_correlation_window": "Time (in seconds) to wait for room motion after a border sensor triggers to confirm an entry. Set this above your border PIR's cooldown period.",
+                    "border_exit_timeout": "Time (in seconds) after a border crossing with no resumed room motion before considering the room vacated.",
+                    "border_only_mode": "Enable for rooms with no physical door. Occupancy relies entirely on border sensor + room motion correlation. The door sensor field is ignored when this is enabled."
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "wasp_id": "Motion sensor",
+                    "box_id": "Door sensor",
+                    "door_closed_delay": "Door closed delay",
+                    "door_open_timeout": "Door open timeout",
+                    "immediate_on": "Immediate on",
+                    "border_ids": "Border sensors",
+                    "border_correlation_window": "Border correlation window",
+                    "border_exit_timeout": "Border exit timeout",
+                    "border_only_mode": "Border only mode"
+                },
+                "data_description": {
+                    "wasp_id": "Select the motion sensor for the room.",
+                    "box_id": "Select the door sensor for the room. Leave empty if the room has no door (use border sensors instead).",
+                    "door_closed_delay": "Set the delay (in seconds) after the door is closed before determining if the room is occupied. If motion is detected when the delay expires, the helper is set to occupied.\nShould be set to about 10 seconds above how long your motion sensor stays active after motion has stopped.",
+                    "door_open_timeout": "The timeout (in seconds) after which if there is no motion detected and the door is open, the helper will be set to unoccupied.",
+                    "immediate_on": "When enabled, occupancy turns on immediately when motion is detected or the door is opened.\nWhen disabled, the door closed delay applies before turning on.",
+                    "border_ids": "Select curtain PIR or passage sensors that detect movement between this room and adjacent spaces. These are motion sensors mounted in doorways or archways without physical doors.",
+                    "border_correlation_window": "Time (in seconds) to wait for room motion after a border sensor triggers to confirm an entry. Set this above your border PIR's cooldown period.",
+                    "border_exit_timeout": "Time (in seconds) after a border crossing with no resumed room motion before considering the room vacated.",
+                    "border_only_mode": "Enable for rooms with no physical door. Occupancy relies entirely on border sensor + room motion correlation. The door sensor field is ignored when this is enabled."
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "wasp_in_a_openbox": {
+                "state_attributes": {
+                    "motion_sensor_state": {
+                        "name": "Motion sensor state",
+                        "state": {
+                            "on": "Detected",
+                            "off": "Clear",
+                            "unknown": "Unknown"
+                        }
+                    },
+                    "door_sensor_state": {
+                        "name": "Door sensor state",
+                        "state": {
+                            "on": "Open",
+                            "off": "Closed",
+                            "none": "Not configured",
+                            "unknown": "Unknown"
+                        }
+                    },
+                    "border_sensors_state": {
+                        "name": "Border sensors state"
+                    },
+                    "last_border_event": {
+                        "name": "Last border event"
+                    },
+                    "inferred_direction": {
+                        "name": "Inferred direction",
+                        "state": {
+                            "entry": "Entry",
+                            "exit": "Exit",
+                            "unknown": "Unknown"
+                        }
+                    },
+                    "occupancy_source": {
+                        "name": "Occupancy source",
+                        "state": {
+                            "door": "Door",
+                            "border": "Border sensor",
+                            "motion": "Motion",
+                            "manual": "Manual",
+                            "none": "None"
+                        }
+                    },
+                    "fully_enclosed": {
+                        "name": "Fully enclosed"
+                    }
+                }
+            }
+        }
+    },
+    "services": {
+        "reset": {
+            "name": "Reset",
+            "description": "Reset the occupancy sensor to off and clear any pending timers and border event history."
+        },
+        "force_entry": {
+            "name": "Force entry",
+            "description": "Manually signal an entry event, setting the room to occupied."
+        },
+        "force_exit": {
+            "name": "Force exit",
+            "description": "Manually signal an exit event, setting the room to unoccupied and clearing all timers."
+        }
+    }
+}

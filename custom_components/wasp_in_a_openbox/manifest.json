@@ -1,0 +1,14 @@
+{
+  "domain": "wasp_in_a_openbox",
+  "name": "Wasp in a Openbox",
+  "codeowners": [
+    "@dvbit"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/dvbit/HA-Wasp-In-A-Openbox",
+  "integration_type": "helper",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/dvbit/HA-Wasp-In-A-Openbox/issues",
+  "requirements": [ ],
+  "version": "0.2.0"
+}

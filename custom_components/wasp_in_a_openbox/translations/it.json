@@ -1,0 +1,127 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Crea Wasp in a Openbox",
+                "description": "Crea un sensore di occupazione che gestisce i periodi senza movimento.\nSupporta stanze chiuse (porte) e passaggi aperti (sensori di confine/tenda).",
+                "data": {
+                    "name": "Nome",
+                    "wasp_id": "Sensore di movimento",
+                    "box_id": "Sensore porta",
+                    "door_closed_delay": "Ritardo porta chiusa",
+                    "door_open_timeout": "Timeout porta aperta",
+                    "immediate_on": "Attivazione immediata",
+                    "border_ids": "Sensori di confine",
+                    "border_correlation_window": "Finestra di correlazione confine",
+                    "border_exit_timeout": "Timeout uscita confine",
+                    "border_only_mode": "Modalità solo confine"
+                },
+                "data_description": {
+                    "wasp_id": "Seleziona il sensore di movimento della stanza.",
+                    "box_id": "Seleziona il sensore porta della stanza. Lascia vuoto se la stanza non ha una porta (usa i sensori di confine).",
+                    "door_closed_delay": "Imposta il ritardo (in secondi) dopo la chiusura della porta prima di determinare se la stanza è occupata. Se viene rilevato movimento alla scadenza del ritardo, l'helper viene impostato su occupato.\nDovrebbe essere impostato a circa 10 secondi sopra il tempo in cui il sensore di movimento rimane attivo dopo che il movimento si è fermato.",
+                    "door_open_timeout": "Il timeout (in secondi) dopo il quale, se non viene rilevato movimento e la porta è aperta, l'helper verrà impostato su non occupato.",
+                    "immediate_on": "Quando abilitato, l'occupazione si attiva immediatamente quando viene rilevato movimento o la porta viene aperta.\nQuando disabilitato, il ritardo porta chiusa si applica prima dell'attivazione.",
+                    "border_ids": "Seleziona sensori PIR a tenda o di passaggio che rilevano il movimento tra questa stanza e gli spazi adiacenti. Sono sensori di movimento montati nei varchi o negli archi senza porte fisiche.",
+                    "border_correlation_window": "Tempo (in secondi) di attesa per il movimento nella stanza dopo l'attivazione di un sensore di confine per confermare un ingresso. Impostare sopra il periodo di raffreddamento del PIR di confine.",
+                    "border_exit_timeout": "Tempo (in secondi) dopo un attraversamento del confine senza ripresa del movimento nella stanza prima di considerare la stanza vuota.",
+                    "border_only_mode": "Abilita per stanze senza porta fisica. L'occupazione si basa interamente sulla correlazione sensore di confine + movimento nella stanza. Il campo sensore porta viene ignorato quando questa opzione è abilitata."
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "wasp_id": "Sensore di movimento",
+                    "box_id": "Sensore porta",
+                    "door_closed_delay": "Ritardo porta chiusa",
+                    "door_open_timeout": "Timeout porta aperta",
+                    "immediate_on": "Attivazione immediata",
+                    "border_ids": "Sensori di confine",
+                    "border_correlation_window": "Finestra di correlazione confine",
+                    "border_exit_timeout": "Timeout uscita confine",
+                    "border_only_mode": "Modalità solo confine"
+                },
+                "data_description": {
+                    "wasp_id": "Seleziona il sensore di movimento della stanza.",
+                    "box_id": "Seleziona il sensore porta della stanza. Lascia vuoto se la stanza non ha una porta (usa i sensori di confine).",
+                    "door_closed_delay": "Imposta il ritardo (in secondi) dopo la chiusura della porta prima di determinare se la stanza è occupata. Se viene rilevato movimento alla scadenza del ritardo, l'helper viene impostato su occupato.\nDovrebbe essere impostato a circa 10 secondi sopra il tempo in cui il sensore di movimento rimane attivo dopo che il movimento si è fermato.",
+                    "door_open_timeout": "Il timeout (in secondi) dopo il quale, se non viene rilevato movimento e la porta è aperta, l'helper verrà impostato su non occupato.",
+                    "immediate_on": "Quando abilitato, l'occupazione si attiva immediatamente quando viene rilevato movimento o la porta viene aperta.\nQuando disabilitato, il ritardo porta chiusa si applica prima dell'attivazione.",
+                    "border_ids": "Seleziona sensori PIR a tenda o di passaggio che rilevano il movimento tra questa stanza e gli spazi adiacenti. Sono sensori di movimento montati nei varchi o negli archi senza porte fisiche.",
+                    "border_correlation_window": "Tempo (in secondi) di attesa per il movimento nella stanza dopo l'attivazione di un sensore di confine per confermare un ingresso. Impostare sopra il periodo di raffreddamento del PIR di confine.",
+                    "border_exit_timeout": "Tempo (in secondi) dopo un attraversamento del confine senza ripresa del movimento nella stanza prima di considerare la stanza vuota.",
+                    "border_only_mode": "Abilita per stanze senza porta fisica. L'occupazione si basa interamente sulla correlazione sensore di confine + movimento nella stanza. Il campo sensore porta viene ignorato quando questa opzione è abilitata."
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "wasp_in_a_openbox": {
+                "state_attributes": {
+                    "motion_sensor_state": {
+                        "name": "Stato sensore movimento",
+                        "state": {
+                            "on": "Rilevato",
+                            "off": "Libero",
+                            "unknown": "Sconosciuto"
+                        }
+                    },
+                    "door_sensor_state": {
+                        "name": "Stato sensore porta",
+                        "state": {
+                            "on": "Aperta",
+                            "off": "Chiusa",
+                            "none": "Non configurato",
+                            "unknown": "Sconosciuto"
+                        }
+                    },
+                    "border_sensors_state": {
+                        "name": "Stato sensori di confine"
+                    },
+                    "last_border_event": {
+                        "name": "Ultimo evento confine"
+                    },
+                    "inferred_direction": {
+                        "name": "Direzione dedotta",
+                        "state": {
+                            "entry": "Ingresso",
+                            "exit": "Uscita",
+                            "unknown": "Sconosciuta"
+                        }
+                    },
+                    "occupancy_source": {
+                        "name": "Origine occupazione",
+                        "state": {
+                            "door": "Porta",
+                            "border": "Sensore di confine",
+                            "motion": "Movimento",
+                            "manual": "Manuale",
+                            "none": "Nessuna"
+                        }
+                    },
+                    "fully_enclosed": {
+                        "name": "Completamente chiusa"
+                    }
+                }
+            }
+        }
+    },
+    "services": {
+        "reset": {
+            "name": "Reset",
+            "description": "Reimposta il sensore di occupazione su spento e cancella tutti i timer in sospeso e la cronologia degli eventi di confine."
+        },
+        "force_entry": {
+            "name": "Forza ingresso",
+            "description": "Segnala manualmente un evento di ingresso, impostando la stanza come occupata."
+        },
+        "force_exit": {
+            "name": "Forza uscita",
+            "description": "Segnala manualmente un evento di uscita, impostando la stanza come non occupata e cancellando tutti i timer."
+        }
+    }
+}

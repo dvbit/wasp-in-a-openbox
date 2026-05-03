@@ -1,0 +1,127 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Créer Wasp in a Openbox",
+                "description": "Crée un capteur d'occupation qui gère les périodes sans mouvement.\nPrend en charge les pièces fermées (portes) et les passages ouverts (capteurs de bordure/rideau).",
+                "data": {
+                    "name": "Nom",
+                    "wasp_id": "Capteur de mouvement",
+                    "box_id": "Capteur de porte",
+                    "door_closed_delay": "Délai porte fermée",
+                    "door_open_timeout": "Timeout porte ouverte",
+                    "immediate_on": "Activation immédiate",
+                    "border_ids": "Capteurs de bordure",
+                    "border_correlation_window": "Fenêtre de corrélation bordure",
+                    "border_exit_timeout": "Timeout sortie bordure",
+                    "border_only_mode": "Mode bordure uniquement"
+                },
+                "data_description": {
+                    "wasp_id": "Sélectionnez le capteur de mouvement de la pièce.",
+                    "box_id": "Sélectionnez le capteur de porte de la pièce. Laissez vide si la pièce n'a pas de porte (utilisez les capteurs de bordure à la place).",
+                    "door_closed_delay": "Définit le délai (en secondes) après la fermeture de la porte avant de déterminer si la pièce est occupée. Si un mouvement est détecté à l'expiration du délai, l'assistant est réglé sur occupé.\nDevrait être réglé à environ 10 secondes au-dessus de la durée pendant laquelle votre capteur de mouvement reste actif après l'arrêt du mouvement.",
+                    "door_open_timeout": "Le timeout (en secondes) après lequel, si aucun mouvement n'est détecté et que la porte est ouverte, l'assistant sera réglé sur inoccupé.",
+                    "immediate_on": "Lorsqu'activé, l'occupation s'active immédiatement lorsqu'un mouvement est détecté ou que la porte est ouverte.\nLorsque désactivé, le délai porte fermée s'applique avant l'activation.",
+                    "border_ids": "Sélectionnez les capteurs PIR à rideau ou de passage qui détectent le mouvement entre cette pièce et les espaces adjacents. Ce sont des capteurs de mouvement montés dans des embrasures ou des arches sans portes physiques.",
+                    "border_correlation_window": "Temps (en secondes) d'attente de mouvement dans la pièce après le déclenchement d'un capteur de bordure pour confirmer une entrée. Réglez au-dessus de la période de refroidissement de votre PIR de bordure.",
+                    "border_exit_timeout": "Temps (en secondes) après un passage de bordure sans reprise de mouvement dans la pièce avant de considérer la pièce comme vide.",
+                    "border_only_mode": "Activer pour les pièces sans porte physique. L'occupation repose entièrement sur la corrélation capteur de bordure + mouvement dans la pièce. Le champ capteur de porte est ignoré lorsque cette option est activée."
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "wasp_id": "Capteur de mouvement",
+                    "box_id": "Capteur de porte",
+                    "door_closed_delay": "Délai porte fermée",
+                    "door_open_timeout": "Timeout porte ouverte",
+                    "immediate_on": "Activation immédiate",
+                    "border_ids": "Capteurs de bordure",
+                    "border_correlation_window": "Fenêtre de corrélation bordure",
+                    "border_exit_timeout": "Timeout sortie bordure",
+                    "border_only_mode": "Mode bordure uniquement"
+                },
+                "data_description": {
+                    "wasp_id": "Sélectionnez le capteur de mouvement de la pièce.",
+                    "box_id": "Sélectionnez le capteur de porte de la pièce. Laissez vide si la pièce n'a pas de porte (utilisez les capteurs de bordure à la place).",
+                    "door_closed_delay": "Définit le délai (en secondes) après la fermeture de la porte avant de déterminer si la pièce est occupée. Si un mouvement est détecté à l'expiration du délai, l'assistant est réglé sur occupé.\nDevrait être réglé à environ 10 secondes au-dessus de la durée pendant laquelle votre capteur de mouvement reste actif après l'arrêt du mouvement.",
+                    "door_open_timeout": "Le timeout (en secondes) après lequel, si aucun mouvement n'est détecté et que la porte est ouverte, l'assistant sera réglé sur inoccupé.",
+                    "immediate_on": "Lorsqu'activé, l'occupation s'active immédiatement lorsqu'un mouvement est détecté ou que la porte est ouverte.\nLorsque désactivé, le délai porte fermée s'applique avant l'activation.",
+                    "border_ids": "Sélectionnez les capteurs PIR à rideau ou de passage qui détectent le mouvement entre cette pièce et les espaces adjacents. Ce sont des capteurs de mouvement montés dans des embrasures ou des arches sans portes physiques.",
+                    "border_correlation_window": "Temps (en secondes) d'attente de mouvement dans la pièce après le déclenchement d'un capteur de bordure pour confirmer une entrée. Réglez au-dessus de la période de refroidissement de votre PIR de bordure.",
+                    "border_exit_timeout": "Temps (en secondes) après un passage de bordure sans reprise de mouvement dans la pièce avant de considérer la pièce comme vide.",
+                    "border_only_mode": "Activer pour les pièces sans porte physique. L'occupation repose entièrement sur la corrélation capteur de bordure + mouvement dans la pièce. Le champ capteur de porte est ignoré lorsque cette option est activée."
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "wasp_in_a_openbox": {
+                "state_attributes": {
+                    "motion_sensor_state": {
+                        "name": "État capteur de mouvement",
+                        "state": {
+                            "on": "Détecté",
+                            "off": "Libre",
+                            "unknown": "Inconnu"
+                        }
+                    },
+                    "door_sensor_state": {
+                        "name": "État capteur de porte",
+                        "state": {
+                            "on": "Ouverte",
+                            "off": "Fermée",
+                            "none": "Non configuré",
+                            "unknown": "Inconnu"
+                        }
+                    },
+                    "border_sensors_state": {
+                        "name": "État capteurs de bordure"
+                    },
+                    "last_border_event": {
+                        "name": "Dernier événement bordure"
+                    },
+                    "inferred_direction": {
+                        "name": "Direction déduite",
+                        "state": {
+                            "entry": "Entrée",
+                            "exit": "Sortie",
+                            "unknown": "Inconnue"
+                        }
+                    },
+                    "occupancy_source": {
+                        "name": "Source d'occupation",
+                        "state": {
+                            "door": "Porte",
+                            "border": "Capteur de bordure",
+                            "motion": "Mouvement",
+                            "manual": "Manuel",
+                            "none": "Aucune"
+                        }
+                    },
+                    "fully_enclosed": {
+                        "name": "Entièrement fermée"
+                    }
+                }
+            }
+        }
+    },
+    "services": {
+        "reset": {
+            "name": "Réinitialiser",
+            "description": "Réinitialise le capteur d'occupation sur éteint et efface tous les minuteurs en attente et l'historique des événements de bordure."
+        },
+        "force_entry": {
+            "name": "Forcer l'entrée",
+            "description": "Signale manuellement un événement d'entrée, définissant la pièce comme occupée."
+        },
+        "force_exit": {
+            "name": "Forcer la sortie",
+            "description": "Signale manuellement un événement de sortie, définissant la pièce comme inoccupée et effaçant tous les minuteurs."
+        }
+    }
+}

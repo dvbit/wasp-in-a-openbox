@@ -1,0 +1,127 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Wasp in a Openbox erstellen",
+                "description": "Erstellt einen Belegungssensor, der Zeiträume ohne Bewegung verwaltet.\nUnterstützt geschlossene Räume (Türen) und offene Durchgänge (Grenz-/Vorhangsensoren).",
+                "data": {
+                    "name": "Name",
+                    "wasp_id": "Bewegungssensor",
+                    "box_id": "Türsensor",
+                    "door_closed_delay": "Verzögerung bei geschlossener Tür",
+                    "door_open_timeout": "Timeout bei offener Tür",
+                    "immediate_on": "Sofortige Aktivierung",
+                    "border_ids": "Grenzsensoren",
+                    "border_correlation_window": "Grenz-Korrelationsfenster",
+                    "border_exit_timeout": "Grenz-Ausgangs-Timeout",
+                    "border_only_mode": "Nur-Grenz-Modus"
+                },
+                "data_description": {
+                    "wasp_id": "Wählen Sie den Bewegungssensor für den Raum.",
+                    "box_id": "Wählen Sie den Türsensor für den Raum. Leer lassen, wenn der Raum keine Tür hat (verwenden Sie stattdessen Grenzsensoren).",
+                    "door_closed_delay": "Verzögerung (in Sekunden) nach dem Schließen der Tür, bevor bestimmt wird, ob der Raum belegt ist. Wenn bei Ablauf der Verzögerung Bewegung erkannt wird, wird der Helper auf belegt gesetzt.\nSollte auf etwa 10 Sekunden über der Zeit eingestellt werden, die Ihr Bewegungssensor nach Bewegungsende aktiv bleibt.",
+                    "door_open_timeout": "Das Timeout (in Sekunden), nach dem, wenn keine Bewegung erkannt wird und die Tür offen ist, der Helper auf unbelegt gesetzt wird.",
+                    "immediate_on": "Wenn aktiviert, wird die Belegung sofort eingeschaltet, wenn Bewegung erkannt wird oder die Tür geöffnet wird.\nWenn deaktiviert, gilt die Verzögerung bei geschlossener Tür vor dem Einschalten.",
+                    "border_ids": "Wählen Sie Vorhang-PIR- oder Durchgangssensoren, die Bewegung zwischen diesem Raum und angrenzenden Bereichen erkennen. Dies sind Bewegungssensoren, die in Türrahmen oder Bögen ohne physische Türen montiert sind.",
+                    "border_correlation_window": "Zeit (in Sekunden), die nach Auslösung eines Grenzsensors auf Raumbewegung gewartet wird, um einen Eintritt zu bestätigen. Stellen Sie dies über die Abklingzeit Ihres Grenz-PIR ein.",
+                    "border_exit_timeout": "Zeit (in Sekunden) nach einer Grenzüberquerung ohne wieder aufgenommene Raumbewegung, bevor der Raum als verlassen gilt.",
+                    "border_only_mode": "Aktivieren für Räume ohne physische Tür. Die Belegung basiert ausschließlich auf der Korrelation von Grenzsensor + Raumbewegung. Das Türsensor-Feld wird ignoriert, wenn dies aktiviert ist."
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "wasp_id": "Bewegungssensor",
+                    "box_id": "Türsensor",
+                    "door_closed_delay": "Verzögerung bei geschlossener Tür",
+                    "door_open_timeout": "Timeout bei offener Tür",
+                    "immediate_on": "Sofortige Aktivierung",
+                    "border_ids": "Grenzsensoren",
+                    "border_correlation_window": "Grenz-Korrelationsfenster",
+                    "border_exit_timeout": "Grenz-Ausgangs-Timeout",
+                    "border_only_mode": "Nur-Grenz-Modus"
+                },
+                "data_description": {
+                    "wasp_id": "Wählen Sie den Bewegungssensor für den Raum.",
+                    "box_id": "Wählen Sie den Türsensor für den Raum. Leer lassen, wenn der Raum keine Tür hat (verwenden Sie stattdessen Grenzsensoren).",
+                    "door_closed_delay": "Verzögerung (in Sekunden) nach dem Schließen der Tür, bevor bestimmt wird, ob der Raum belegt ist. Wenn bei Ablauf der Verzögerung Bewegung erkannt wird, wird der Helper auf belegt gesetzt.\nSollte auf etwa 10 Sekunden über der Zeit eingestellt werden, die Ihr Bewegungssensor nach Bewegungsende aktiv bleibt.",
+                    "door_open_timeout": "Das Timeout (in Sekunden), nach dem, wenn keine Bewegung erkannt wird und die Tür offen ist, der Helper auf unbelegt gesetzt wird.",
+                    "immediate_on": "Wenn aktiviert, wird die Belegung sofort eingeschaltet, wenn Bewegung erkannt wird oder die Tür geöffnet wird.\nWenn deaktiviert, gilt die Verzögerung bei geschlossener Tür vor dem Einschalten.",
+                    "border_ids": "Wählen Sie Vorhang-PIR- oder Durchgangssensoren, die Bewegung zwischen diesem Raum und angrenzenden Bereichen erkennen. Dies sind Bewegungssensoren, die in Türrahmen oder Bögen ohne physische Türen montiert sind.",
+                    "border_correlation_window": "Zeit (in Sekunden), die nach Auslösung eines Grenzsensors auf Raumbewegung gewartet wird, um einen Eintritt zu bestätigen. Stellen Sie dies über die Abklingzeit Ihres Grenz-PIR ein.",
+                    "border_exit_timeout": "Zeit (in Sekunden) nach einer Grenzüberquerung ohne wieder aufgenommene Raumbewegung, bevor der Raum als verlassen gilt.",
+                    "border_only_mode": "Aktivieren für Räume ohne physische Tür. Die Belegung basiert ausschließlich auf der Korrelation von Grenzsensor + Raumbewegung. Das Türsensor-Feld wird ignoriert, wenn dies aktiviert ist."
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "wasp_in_a_openbox": {
+                "state_attributes": {
+                    "motion_sensor_state": {
+                        "name": "Bewegungssensor-Status",
+                        "state": {
+                            "on": "Erkannt",
+                            "off": "Frei",
+                            "unknown": "Unbekannt"
+                        }
+                    },
+                    "door_sensor_state": {
+                        "name": "Türsensor-Status",
+                        "state": {
+                            "on": "Offen",
+                            "off": "Geschlossen",
+                            "none": "Nicht konfiguriert",
+                            "unknown": "Unbekannt"
+                        }
+                    },
+                    "border_sensors_state": {
+                        "name": "Grenzsensoren-Status"
+                    },
+                    "last_border_event": {
+                        "name": "Letztes Grenzereignis"
+                    },
+                    "inferred_direction": {
+                        "name": "Abgeleitete Richtung",
+                        "state": {
+                            "entry": "Eintritt",
+                            "exit": "Austritt",
+                            "unknown": "Unbekannt"
+                        }
+                    },
+                    "occupancy_source": {
+                        "name": "Belegungsquelle",
+                        "state": {
+                            "door": "Tür",
+                            "border": "Grenzsensor",
+                            "motion": "Bewegung",
+                            "manual": "Manuell",
+                            "none": "Keine"
+                        }
+                    },
+                    "fully_enclosed": {
+                        "name": "Vollständig geschlossen"
+                    }
+                }
+            }
+        }
+    },
+    "services": {
+        "reset": {
+            "name": "Zurücksetzen",
+            "description": "Setzt den Belegungssensor auf aus zurück und löscht alle ausstehenden Timer und die Grenzereignis-Historie."
+        },
+        "force_entry": {
+            "name": "Eintritt erzwingen",
+            "description": "Signalisiert manuell ein Eintrittsereignis und setzt den Raum auf belegt."
+        },
+        "force_exit": {
+            "name": "Austritt erzwingen",
+            "description": "Signalisiert manuell ein Austrittsereignis und setzt den Raum auf unbelegt, wobei alle Timer gelöscht werden."
+        }
+    }
+}

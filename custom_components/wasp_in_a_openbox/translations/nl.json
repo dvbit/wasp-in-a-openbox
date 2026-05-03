@@ -1,0 +1,127 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Wasp in a Openbox aanmaken",
+                "description": "Maak een bezettingssensor die perioden zonder beweging verwerkt.\nOndersteunt afgesloten ruimtes (deuren) en open doorgangen (grens-/gordijnsensoren).",
+                "data": {
+                    "name": "Naam",
+                    "wasp_id": "Bewegingssensor",
+                    "box_id": "Deursensor",
+                    "door_closed_delay": "Vertraging gesloten deur",
+                    "door_open_timeout": "Timeout open deur",
+                    "immediate_on": "Direct inschakelen",
+                    "border_ids": "Grenssensoren",
+                    "border_correlation_window": "Grens-correlatie venster",
+                    "border_exit_timeout": "Grens-vertrek timeout",
+                    "border_only_mode": "Alleen-grens modus"
+                },
+                "data_description": {
+                    "wasp_id": "Selecteer de bewegingssensor voor de ruimte.",
+                    "box_id": "Selecteer de deursensor voor de ruimte. Laat leeg als de ruimte geen deur heeft (gebruik dan grenssensoren).",
+                    "door_closed_delay": "Stel de vertraging (in seconden) in na het sluiten van de deur voordat wordt bepaald of de ruimte bezet is. Als beweging wordt gedetecteerd wanneer de vertraging afloopt, wordt de helper ingesteld op bezet.\nMoet worden ingesteld op ongeveer 10 seconden boven hoe lang uw bewegingssensor actief blijft nadat de beweging is gestopt.",
+                    "door_open_timeout": "De timeout (in seconden) waarna, als er geen beweging is gedetecteerd en de deur open is, de helper wordt ingesteld op onbezet.",
+                    "immediate_on": "Wanneer ingeschakeld, wordt de bezetting onmiddellijk ingeschakeld wanneer beweging wordt gedetecteerd of de deur wordt geopend.\nWanneer uitgeschakeld, wordt de vertraging gesloten deur toegepast voordat wordt ingeschakeld.",
+                    "border_ids": "Selecteer gordijn-PIR- of doorgangssensoren die beweging detecteren tussen deze ruimte en aangrenzende ruimtes. Dit zijn bewegingssensoren gemonteerd in deuropeningen of bogen zonder fysieke deuren.",
+                    "border_correlation_window": "Tijd (in seconden) om te wachten op ruimtebeweging nadat een grenssensor activeert om een binnenkomst te bevestigen. Stel dit in boven de afkoelperiode van uw grens-PIR.",
+                    "border_exit_timeout": "Tijd (in seconden) na een grensovergang zonder hervatte ruimtebeweging voordat de ruimte als verlaten wordt beschouwd.",
+                    "border_only_mode": "Inschakelen voor ruimtes zonder fysieke deur. Bezetting is volledig afhankelijk van grenssensor + ruimtebeweging correlatie. Het deursensorveld wordt genegeerd wanneer dit is ingeschakeld."
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "wasp_id": "Bewegingssensor",
+                    "box_id": "Deursensor",
+                    "door_closed_delay": "Vertraging gesloten deur",
+                    "door_open_timeout": "Timeout open deur",
+                    "immediate_on": "Direct inschakelen",
+                    "border_ids": "Grenssensoren",
+                    "border_correlation_window": "Grens-correlatie venster",
+                    "border_exit_timeout": "Grens-vertrek timeout",
+                    "border_only_mode": "Alleen-grens modus"
+                },
+                "data_description": {
+                    "wasp_id": "Selecteer de bewegingssensor voor de ruimte.",
+                    "box_id": "Selecteer de deursensor voor de ruimte. Laat leeg als de ruimte geen deur heeft (gebruik dan grenssensoren).",
+                    "door_closed_delay": "Stel de vertraging (in seconden) in na het sluiten van de deur voordat wordt bepaald of de ruimte bezet is. Als beweging wordt gedetecteerd wanneer de vertraging afloopt, wordt de helper ingesteld op bezet.\nMoet worden ingesteld op ongeveer 10 seconden boven hoe lang uw bewegingssensor actief blijft nadat de beweging is gestopt.",
+                    "door_open_timeout": "De timeout (in seconden) waarna, als er geen beweging is gedetecteerd en de deur open is, de helper wordt ingesteld op onbezet.",
+                    "immediate_on": "Wanneer ingeschakeld, wordt de bezetting onmiddellijk ingeschakeld wanneer beweging wordt gedetecteerd of de deur wordt geopend.\nWanneer uitgeschakeld, wordt de vertraging gesloten deur toegepast voordat wordt ingeschakeld.",
+                    "border_ids": "Selecteer gordijn-PIR- of doorgangssensoren die beweging detecteren tussen deze ruimte en aangrenzende ruimtes. Dit zijn bewegingssensoren gemonteerd in deuropeningen of bogen zonder fysieke deuren.",
+                    "border_correlation_window": "Tijd (in seconden) om te wachten op ruimtebeweging nadat een grenssensor activeert om een binnenkomst te bevestigen. Stel dit in boven de afkoelperiode van uw grens-PIR.",
+                    "border_exit_timeout": "Tijd (in seconden) na een grensovergang zonder hervatte ruimtebeweging voordat de ruimte als verlaten wordt beschouwd.",
+                    "border_only_mode": "Inschakelen voor ruimtes zonder fysieke deur. Bezetting is volledig afhankelijk van grenssensor + ruimtebeweging correlatie. Het deursensorveld wordt genegeerd wanneer dit is ingeschakeld."
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "wasp_in_a_openbox": {
+                "state_attributes": {
+                    "motion_sensor_state": {
+                        "name": "Bewegingssensor status",
+                        "state": {
+                            "on": "Gedetecteerd",
+                            "off": "Vrij",
+                            "unknown": "Onbekend"
+                        }
+                    },
+                    "door_sensor_state": {
+                        "name": "Deursensor status",
+                        "state": {
+                            "on": "Open",
+                            "off": "Gesloten",
+                            "none": "Niet geconfigureerd",
+                            "unknown": "Onbekend"
+                        }
+                    },
+                    "border_sensors_state": {
+                        "name": "Grenssensoren status"
+                    },
+                    "last_border_event": {
+                        "name": "Laatste grensgebeurtenis"
+                    },
+                    "inferred_direction": {
+                        "name": "Afgeleide richting",
+                        "state": {
+                            "entry": "Binnenkomst",
+                            "exit": "Vertrek",
+                            "unknown": "Onbekend"
+                        }
+                    },
+                    "occupancy_source": {
+                        "name": "Bezettingsbron",
+                        "state": {
+                            "door": "Deur",
+                            "border": "Grenssensor",
+                            "motion": "Beweging",
+                            "manual": "Handmatig",
+                            "none": "Geen"
+                        }
+                    },
+                    "fully_enclosed": {
+                        "name": "Volledig afgesloten"
+                    }
+                }
+            }
+        }
+    },
+    "services": {
+        "reset": {
+            "name": "Resetten",
+            "description": "Reset de bezettingssensor naar uit en wis alle wachtende timers en grensgebeurtenisgeschiedenis."
+        },
+        "force_entry": {
+            "name": "Binnenkomst forceren",
+            "description": "Signaleer handmatig een binnenkomstgebeurtenis, waardoor de ruimte als bezet wordt ingesteld."
+        },
+        "force_exit": {
+            "name": "Vertrek forceren",
+            "description": "Signaleer handmatig een vertrekgebeurtenis, waardoor de ruimte als onbezet wordt ingesteld en alle timers worden gewist."
+        }
+    }
+}

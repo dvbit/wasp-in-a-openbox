@@ -1,0 +1,127 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Crear Wasp in a Openbox",
+                "description": "Crea un sensor de ocupación que gestiona los períodos sin movimiento.\nSoporta habitaciones cerradas (puertas) y pasillos abiertos (sensores de frontera/cortina).",
+                "data": {
+                    "name": "Nombre",
+                    "wasp_id": "Sensor de movimiento",
+                    "box_id": "Sensor de puerta",
+                    "door_closed_delay": "Retardo puerta cerrada",
+                    "door_open_timeout": "Timeout puerta abierta",
+                    "immediate_on": "Activación inmediata",
+                    "border_ids": "Sensores de frontera",
+                    "border_correlation_window": "Ventana de correlación frontera",
+                    "border_exit_timeout": "Timeout salida frontera",
+                    "border_only_mode": "Modo solo frontera"
+                },
+                "data_description": {
+                    "wasp_id": "Selecciona el sensor de movimiento de la habitación.",
+                    "box_id": "Selecciona el sensor de puerta de la habitación. Déjalo vacío si la habitación no tiene puerta (usa sensores de frontera en su lugar).",
+                    "door_closed_delay": "Establece el retardo (en segundos) después de cerrar la puerta antes de determinar si la habitación está ocupada. Si se detecta movimiento al expirar el retardo, el helper se establece en ocupado.\nDebe establecerse en aproximadamente 10 segundos por encima del tiempo que tu sensor de movimiento permanece activo después de que el movimiento se ha detenido.",
+                    "door_open_timeout": "El timeout (en segundos) después del cual, si no se detecta movimiento y la puerta está abierta, el helper se establecerá en desocupado.",
+                    "immediate_on": "Cuando está habilitado, la ocupación se activa inmediatamente cuando se detecta movimiento o se abre la puerta.\nCuando está deshabilitado, el retardo de puerta cerrada se aplica antes de activarse.",
+                    "border_ids": "Selecciona sensores PIR de cortina o de paso que detectan movimiento entre esta habitación y los espacios adyacentes. Son sensores de movimiento montados en marcos de puertas o arcos sin puertas físicas.",
+                    "border_correlation_window": "Tiempo (en segundos) de espera para el movimiento en la habitación después de que un sensor de frontera se active para confirmar una entrada. Establécelo por encima del período de enfriamiento de tu PIR de frontera.",
+                    "border_exit_timeout": "Tiempo (en segundos) después de un cruce de frontera sin movimiento reanudado en la habitación antes de considerar la habitación vacía.",
+                    "border_only_mode": "Habilita para habitaciones sin puerta física. La ocupación se basa enteramente en la correlación sensor de frontera + movimiento en la habitación. El campo del sensor de puerta se ignora cuando esto está habilitado."
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "wasp_id": "Sensor de movimiento",
+                    "box_id": "Sensor de puerta",
+                    "door_closed_delay": "Retardo puerta cerrada",
+                    "door_open_timeout": "Timeout puerta abierta",
+                    "immediate_on": "Activación inmediata",
+                    "border_ids": "Sensores de frontera",
+                    "border_correlation_window": "Ventana de correlación frontera",
+                    "border_exit_timeout": "Timeout salida frontera",
+                    "border_only_mode": "Modo solo frontera"
+                },
+                "data_description": {
+                    "wasp_id": "Selecciona el sensor de movimiento de la habitación.",
+                    "box_id": "Selecciona el sensor de puerta de la habitación. Déjalo vacío si la habitación no tiene puerta (usa sensores de frontera en su lugar).",
+                    "door_closed_delay": "Establece el retardo (en segundos) después de cerrar la puerta antes de determinar si la habitación está ocupada. Si se detecta movimiento al expirar el retardo, el helper se establece en ocupado.\nDebe establecerse en aproximadamente 10 segundos por encima del tiempo que tu sensor de movimiento permanece activo después de que el movimiento se ha detenido.",
+                    "door_open_timeout": "El timeout (en segundos) después del cual, si no se detecta movimiento y la puerta está abierta, el helper se establecerá en desocupado.",
+                    "immediate_on": "Cuando está habilitado, la ocupación se activa inmediatamente cuando se detecta movimiento o se abre la puerta.\nCuando está deshabilitado, el retardo de puerta cerrada se aplica antes de activarse.",
+                    "border_ids": "Selecciona sensores PIR de cortina o de paso que detectan movimiento entre esta habitación y los espacios adyacentes. Son sensores de movimiento montados en marcos de puertas o arcos sin puertas físicas.",
+                    "border_correlation_window": "Tiempo (en segundos) de espera para el movimiento en la habitación después de que un sensor de frontera se active para confirmar una entrada. Establécelo por encima del período de enfriamiento de tu PIR de frontera.",
+                    "border_exit_timeout": "Tiempo (en segundos) después de un cruce de frontera sin movimiento reanudado en la habitación antes de considerar la habitación vacía.",
+                    "border_only_mode": "Habilita para habitaciones sin puerta física. La ocupación se basa enteramente en la correlación sensor de frontera + movimiento en la habitación. El campo del sensor de puerta se ignora cuando esto está habilitado."
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "wasp_in_a_openbox": {
+                "state_attributes": {
+                    "motion_sensor_state": {
+                        "name": "Estado sensor de movimiento",
+                        "state": {
+                            "on": "Detectado",
+                            "off": "Libre",
+                            "unknown": "Desconocido"
+                        }
+                    },
+                    "door_sensor_state": {
+                        "name": "Estado sensor de puerta",
+                        "state": {
+                            "on": "Abierta",
+                            "off": "Cerrada",
+                            "none": "No configurado",
+                            "unknown": "Desconocido"
+                        }
+                    },
+                    "border_sensors_state": {
+                        "name": "Estado sensores de frontera"
+                    },
+                    "last_border_event": {
+                        "name": "Último evento frontera"
+                    },
+                    "inferred_direction": {
+                        "name": "Dirección inferida",
+                        "state": {
+                            "entry": "Entrada",
+                            "exit": "Salida",
+                            "unknown": "Desconocida"
+                        }
+                    },
+                    "occupancy_source": {
+                        "name": "Fuente de ocupación",
+                        "state": {
+                            "door": "Puerta",
+                            "border": "Sensor de frontera",
+                            "motion": "Movimiento",
+                            "manual": "Manual",
+                            "none": "Ninguna"
+                        }
+                    },
+                    "fully_enclosed": {
+                        "name": "Completamente cerrada"
+                    }
+                }
+            }
+        }
+    },
+    "services": {
+        "reset": {
+            "name": "Restablecer",
+            "description": "Restablece el sensor de ocupación a apagado y borra todos los temporizadores pendientes y el historial de eventos de frontera."
+        },
+        "force_entry": {
+            "name": "Forzar entrada",
+            "description": "Señala manualmente un evento de entrada, estableciendo la habitación como ocupada."
+        },
+        "force_exit": {
+            "name": "Forzar salida",
+            "description": "Señala manualmente un evento de salida, estableciendo la habitación como desocupada y borrando todos los temporizadores."
+        }
+    }
+}

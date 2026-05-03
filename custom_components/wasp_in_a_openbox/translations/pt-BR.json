@@ -1,0 +1,127 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Criar Wasp in a Openbox",
+                "description": "Cria um sensor de ocupação que lida com períodos sem movimento.\nSuporta cômodos fechados (portas) e passagens abertas (sensores de fronteira/cortina).",
+                "data": {
+                    "name": "Nome",
+                    "wasp_id": "Sensor de movimento",
+                    "box_id": "Sensor de porta",
+                    "door_closed_delay": "Atraso porta fechada",
+                    "door_open_timeout": "Timeout porta aberta",
+                    "immediate_on": "Ativação imediata",
+                    "border_ids": "Sensores de fronteira",
+                    "border_correlation_window": "Janela de correlação fronteira",
+                    "border_exit_timeout": "Timeout saída fronteira",
+                    "border_only_mode": "Modo somente fronteira"
+                },
+                "data_description": {
+                    "wasp_id": "Selecione o sensor de movimento do cômodo.",
+                    "box_id": "Selecione o sensor de porta do cômodo. Deixe vazio se o cômodo não tem porta (use sensores de fronteira).",
+                    "door_closed_delay": "Define o atraso (em segundos) após o fechamento da porta antes de determinar se o cômodo está ocupado. Se movimento for detectado quando o atraso expirar, o helper é definido como ocupado.\nDeve ser definido em aproximadamente 10 segundos acima do tempo que seu sensor de movimento permanece ativo após o movimento parar.",
+                    "door_open_timeout": "O timeout (em segundos) após o qual, se nenhum movimento for detectado e a porta estiver aberta, o helper será definido como desocupado.",
+                    "immediate_on": "Quando ativado, a ocupação liga imediatamente quando movimento é detectado ou a porta é aberta.\nQuando desativado, o atraso de porta fechada se aplica antes de ligar.",
+                    "border_ids": "Selecione sensores PIR de cortina ou de passagem que detectam movimento entre este cômodo e espaços adjacentes. São sensores de movimento montados em vãos ou arcos sem portas físicas.",
+                    "border_correlation_window": "Tempo (em segundos) para aguardar movimento no cômodo após o acionamento de um sensor de fronteira para confirmar uma entrada. Defina acima do período de resfriamento do seu PIR de fronteira.",
+                    "border_exit_timeout": "Tempo (em segundos) após uma travessia de fronteira sem movimento retomado no cômodo antes de considerar o cômodo vazio.",
+                    "border_only_mode": "Ative para cômodos sem porta física. A ocupação depende inteiramente da correlação sensor de fronteira + movimento no cômodo. O campo do sensor de porta é ignorado quando isto está ativado."
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "wasp_id": "Sensor de movimento",
+                    "box_id": "Sensor de porta",
+                    "door_closed_delay": "Atraso porta fechada",
+                    "door_open_timeout": "Timeout porta aberta",
+                    "immediate_on": "Ativação imediata",
+                    "border_ids": "Sensores de fronteira",
+                    "border_correlation_window": "Janela de correlação fronteira",
+                    "border_exit_timeout": "Timeout saída fronteira",
+                    "border_only_mode": "Modo somente fronteira"
+                },
+                "data_description": {
+                    "wasp_id": "Selecione o sensor de movimento do cômodo.",
+                    "box_id": "Selecione o sensor de porta do cômodo. Deixe vazio se o cômodo não tem porta (use sensores de fronteira).",
+                    "door_closed_delay": "Define o atraso (em segundos) após o fechamento da porta antes de determinar se o cômodo está ocupado. Se movimento for detectado quando o atraso expirar, o helper é definido como ocupado.\nDeve ser definido em aproximadamente 10 segundos acima do tempo que seu sensor de movimento permanece ativo após o movimento parar.",
+                    "door_open_timeout": "O timeout (em segundos) após o qual, se nenhum movimento for detectado e a porta estiver aberta, o helper será definido como desocupado.",
+                    "immediate_on": "Quando ativado, a ocupação liga imediatamente quando movimento é detectado ou a porta é aberta.\nQuando desativado, o atraso de porta fechada se aplica antes de ligar.",
+                    "border_ids": "Selecione sensores PIR de cortina ou de passagem que detectam movimento entre este cômodo e espaços adjacentes. São sensores de movimento montados em vãos ou arcos sem portas físicas.",
+                    "border_correlation_window": "Tempo (em segundos) para aguardar movimento no cômodo após o acionamento de um sensor de fronteira para confirmar uma entrada. Defina acima do período de resfriamento do seu PIR de fronteira.",
+                    "border_exit_timeout": "Tempo (em segundos) após uma travessia de fronteira sem movimento retomado no cômodo antes de considerar o cômodo vazio.",
+                    "border_only_mode": "Ative para cômodos sem porta física. A ocupação depende inteiramente da correlação sensor de fronteira + movimento no cômodo. O campo do sensor de porta é ignorado quando isto está ativado."
+                }
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "wasp_in_a_openbox": {
+                "state_attributes": {
+                    "motion_sensor_state": {
+                        "name": "Estado sensor de movimento",
+                        "state": {
+                            "on": "Detectado",
+                            "off": "Livre",
+                            "unknown": "Desconhecido"
+                        }
+                    },
+                    "door_sensor_state": {
+                        "name": "Estado sensor de porta",
+                        "state": {
+                            "on": "Aberta",
+                            "off": "Fechada",
+                            "none": "Não configurado",
+                            "unknown": "Desconhecido"
+                        }
+                    },
+                    "border_sensors_state": {
+                        "name": "Estado sensores de fronteira"
+                    },
+                    "last_border_event": {
+                        "name": "Último evento fronteira"
+                    },
+                    "inferred_direction": {
+                        "name": "Direção inferida",
+                        "state": {
+                            "entry": "Entrada",
+                            "exit": "Saída",
+                            "unknown": "Desconhecida"
+                        }
+                    },
+                    "occupancy_source": {
+                        "name": "Fonte de ocupação",
+                        "state": {
+                            "door": "Porta",
+                            "border": "Sensor de fronteira",
+                            "motion": "Movimento",
+                            "manual": "Manual",
+                            "none": "Nenhuma"
+                        }
+                    },
+                    "fully_enclosed": {
+                        "name": "Completamente fechado"
+                    }
+                }
+            }
+        }
+    },
+    "services": {
+        "reset": {
+            "name": "Redefinir",
+            "description": "Redefine o sensor de ocupação para desligado e limpa todos os temporizadores pendentes e o histórico de eventos de fronteira."
+        },
+        "force_entry": {
+            "name": "Forçar entrada",
+            "description": "Sinaliza manualmente um evento de entrada, definindo o cômodo como ocupado."
+        },
+        "force_exit": {
+            "name": "Forçar saída",
+            "description": "Sinaliza manualmente um evento de saída, definindo o cômodo como desocupado e limpando todos os temporizadores."
+        }
+    }
+}
